@@ -3,31 +3,41 @@ import path from 'path';
 
 const filePath = path.resolve("data", "zoo.json");
 
+interface Animal {
+    id: number;
+    species: string;
+    isEndangered: boolean;
+    habitat: string;
+    [key: string]: any;
+}
+
 const AnimalsService = {
-    async getAnimals() {
+    async getAnimals(): Promise<Animal[]> {
         const data = await fsPromises.readFile(filePath, "utf-8");
-        return JSON.parse(data);
+        return JSON.parse(data) as Animal[];
     },
-    async getAnimalById(id) {
+
+    async getAnimalById(id: number): Promise<Animal | undefined> {
         const animals = await this.getAnimals();
         return animals.find(animal => animal.id === id);
     },
 
-    async getEndangeredAnimals() {
+    async getEndangeredAnimals(): Promise<Animal[]> {
         const animals = await this.getAnimals();
         return animals.filter(animal => animal.isEndangered);
     },
-    async getAnimalsByHabitat(habitat) {
+
+    async getAnimalsByHabitat(habitat: string): Promise<Animal[]> {
         const animals = await this.getAnimals();
         return animals.filter(animal => animal.habitat === habitat);
     },
 
-    async getAnimalsBySpecies(species) {
+    async getAnimalsBySpecies(species: string): Promise<Animal[]> {
         const animals = await this.getAnimals();
         return animals.filter(animal => animal.species === species);
     },
 
-    async addAnimal(newAnimal) {
+    async addAnimal(newAnimal: Omit<Animal, 'id'>): Promise<Animal> {
         const animals = await this.getAnimals();
         const id = animals.length ? animals[animals.length - 1].id + 1 : 1;
         const animal = { id, ...newAnimal };
@@ -36,7 +46,7 @@ const AnimalsService = {
         return animal;
     },
 
-    async updateAnimal(id, updates) {
+    async updateAnimal(id: number, updates: Partial<Animal>): Promise<Animal> {
         const animals = await this.getAnimals();
         const index = animals.findIndex(animal => animal.id === id);
         if (index === -1) {
@@ -48,7 +58,7 @@ const AnimalsService = {
         return updatedAnimal;
     },
 
-    async deleteAnimal(id) {
+    async deleteAnimal(id: number): Promise<{ message: string }> {
         const animals = await this.getAnimals();
         const index = animals.findIndex(animal => animal.id === id);
         if (index === -1) {

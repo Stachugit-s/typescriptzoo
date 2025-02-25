@@ -1,0 +1,38 @@
+### Pobierz wszystkie zwierzęta
+GET http://localhost:3000/animals
+
+### Pobierz zwierze o ID = 1
+GET http://localhost:3000/animals/1
+
+### Zagrozone zwierzatka
+GET http://localhost:3000/animals/endangered
+
+### Pobierz zwierzęta z habitatem "Savanna"
+GET http://localhost:3000/animals/habitat/Savanna
+
+### Pobierz zwierzęta o gatunku "Lion"
+GET http://localhost:3000/animals/species?species=Lion
+
+### Dodaj nowe zwierzę
+POST http://localhost:3000/animals
+Content-Type: application/json
+
+{
+  "name": "Slon",
+  "species": "Elephant",
+  "age": 10,
+  "isEndangered": true,
+  "habitat": "Savanna"
+}
+
+### Zaktualizuj zwierzę o ID = 1
+PUT http://localhost:3000/animals/1
+Content-Type: application/json
+
+{
+  "age": 6,
+  "habitat": "Jungle"
+}
+
+### Usuń zwierzę o ID = 1
+DELETE http://localhost:3000/animals/1

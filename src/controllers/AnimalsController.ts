@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import AnimalsService from "../services/AnimalService";
+import AnimalsService from '../services/AnimalService';
 
 const AnimalsController = {
     async getAllAnimals(req: Request, res: Response) {
@@ -7,7 +7,7 @@ const AnimalsController = {
             const animals = await AnimalsService.getAnimals();
             res.status(200).json(animals);
         } catch (error) {
-            res.status(500).json({ error: "Failed to retrieve animals." });
+            res.status(500).json({ error: 'Failed to retrieve animals.' });
         }
     },
 
@@ -20,7 +20,7 @@ const AnimalsController = {
             }
             res.status(200).json(animal);
         } catch (error) {
-            res.status(500).json({ error: "Failed to retrieve animal." });
+            res.status(500).json({ error: 'Failed to retrieve animal.' });
         }
     },
 
@@ -29,7 +29,7 @@ const AnimalsController = {
             const animals = await AnimalsService.getEndangeredAnimals();
             res.status(200).json(animals);
         } catch (error) {
-            res.status(500).json({ error: "Failed to retrieve endangered animals." });
+            res.status(500).json({ error: 'Failed to retrieve endangered animals.' });
         }
     },
 
@@ -39,7 +39,7 @@ const AnimalsController = {
             const animals = await AnimalsService.getAnimalsByHabitat(habitat);
             res.status(200).json(animals);
         } catch (error) {
-            res.status(500).json({ error: "Failed to retrieve animals by habitat." });
+            res.status(500).json({ error: 'Failed to retrieve animals by habitat.' });
         }
     },
 
@@ -49,7 +49,7 @@ const AnimalsController = {
             const animals = await AnimalsService.getAnimalsBySpecies(species);
             res.status(200).json(animals);
         } catch (error) {
-            res.status(500).json({ error: "Failed to retrieve animals by species." });
+            res.status(500).json({ error: 'Failed to retrieve animals by species.' });
         }
     },
 
@@ -59,7 +59,7 @@ const AnimalsController = {
             const animal = await AnimalsService.addAnimal(newAnimal);
             res.status(201).json(animal);
         } catch (error) {
-            res.status(500).json({ error: "Failed to add animal." });
+            res.status(500).json({ error: 'Failed to add animal.' });
         }
     },
 
@@ -70,10 +70,10 @@ const AnimalsController = {
             const updatedAnimal = await AnimalsService.updateAnimal(id, updates);
             res.status(200).json(updatedAnimal);
         } catch (error) {
-            if (error.message.includes('not found')) {
+            if (error instanceof Error && error.message.includes('not found')) {
                 res.status(404).json({ error: error.message });
             } else {
-                res.status(500).json({ error: "Failed to update animal." });
+                res.status(500).json({ error: 'Failed to update animal.' });
             }
         }
     },
@@ -84,13 +84,13 @@ const AnimalsController = {
             const result = await AnimalsService.deleteAnimal(id);
             res.status(200).json(result);
         } catch (error) {
-            if (error.message.includes('not found')) {
+            if (error instanceof Error && error.message.includes('not found')) {
                 res.status(404).json({ error: error.message });
             } else {
-                res.status(500).json({ error: "Failed to delete animal." });
+                res.status(500).json({ error: 'Failed to delete animal.' });
             }
         }
     }
 };
 
-export default AnimalsController;
+export { AnimalsController };

@@ -1,26 +1,16 @@
 {
   "compilerOptions": {
-
-    "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-
-    /* Modules */
+    "target": "es2019",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "commonjs",                                /* Specify what module code is generated. */
     "rootDir": "./src",                                  /* Specify the root folder within your source files. */
-
-    "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
-
-
-    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
-
+    "outDir": "./dist",                                  /* Specify an output folder for all emitted files. */
+    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for compatibility. */
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
-
-    /* Type Checking */
     "strict": true,                                      /* Enable all strict type-checking options. */
-
-    /* Completeness */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
+    "moduleResolution": "node",                          /* Use Node.js style module resolution. */
+    "lib": ["es2019", "es2020.promise", "es2020.bigint", "es2020.string"] /* Include standard library declarations. */
   },
-  "include": ["src/**/*"],                               /* Wskazuje pliki do kompilacji */
-  "exclude": ["node_modules"]                           /*  Wyklucza katalog node_modules */
+  "include": ["src/**/*"],                               /* Specify the files to be included in the compilation. */
+  "exclude": ["node_modules"]                            /* Exclude the node_modules directory. */
 }
-
