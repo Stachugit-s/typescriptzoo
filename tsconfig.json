@@ -23,3 +23,4 @@
   "include": ["src/**/*"],                               /* Wskazuje pliki do kompilacji */
   "exclude": ["node_modules"]                           /*  Wyklucza katalog node_modules */
 }
+
