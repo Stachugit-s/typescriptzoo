@@ -1,7 +1,8 @@
-import AnimalsService from "../services/AnimalService.ts";
+import { Request, Response } from 'express';
+import AnimalsService from "../services/AnimalService";
 
 const AnimalsController = {
-    async getAllAnimals(req, res) {
+    async getAllAnimals(req: Request, res: Response) {
         try {
             const animals = await AnimalsService.getAnimals();
             res.status(200).json(animals);
@@ -10,7 +11,7 @@ const AnimalsController = {
         }
     },
 
-    async getAnimalById(req, res) {
+    async getAnimalById(req: Request, res: Response) {
         const id = parseInt(req.params.id);
         try {
             const animal = await AnimalsService.getAnimalById(id);
@@ -23,7 +24,7 @@ const AnimalsController = {
         }
     },
 
-    async getEndangeredAnimals(req, res) {
+    async getEndangeredAnimals(req: Request, res: Response) {
         try {
             const animals = await AnimalsService.getEndangeredAnimals();
             res.status(200).json(animals);
@@ -32,7 +33,7 @@ const AnimalsController = {
         }
     },
 
-    async getAnimalsByHabitat(req, res) {
+    async getAnimalsByHabitat(req: Request, res: Response) {
         const habitat = req.params.habitat;
         try {
             const animals = await AnimalsService.getAnimalsByHabitat(habitat);
@@ -42,8 +43,8 @@ const AnimalsController = {
         }
     },
 
-    async getAnimalsBySpecies(req, res) {
-        const species = req.query.species;
+    async getAnimalsBySpecies(req: Request, res: Response) {
+        const species = req.query.species as string;
         try {
             const animals = await AnimalsService.getAnimalsBySpecies(species);
             res.status(200).json(animals);
@@ -52,7 +53,7 @@ const AnimalsController = {
         }
     },
 
-    async addAnimal(req, res) {
+    async addAnimal(req: Request, res: Response) {
         const newAnimal = req.body;
         try {
             const animal = await AnimalsService.addAnimal(newAnimal);
@@ -62,7 +63,7 @@ const AnimalsController = {
         }
     },
 
-    async updateAnimal(req, res) {
+    async updateAnimal(req: Request, res: Response) {
         const id = parseInt(req.params.id);
         const updates = req.body;
         try {
@@ -77,7 +78,7 @@ const AnimalsController = {
         }
     },
 
-    async deleteAnimal(req, res) {
+    async deleteAnimal(req: Request, res: Response) {
         const id = parseInt(req.params.id);
         try {
             const result = await AnimalsService.deleteAnimal(id);

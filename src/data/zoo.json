@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Simba",
+    "species": "Lion",
+    "age": 5,
+    "isEndangered": true,
+    "habitat": "Savanna"
+  },
+  {
+    "id": 2,
+    "name": "Dory",
+    "species": "Fish",
+    "age": 2,
+    "isEndangered": false,
+    "habitat": "Ocean"
+  },
+  {
+    "id": 3,
+    "name": "Slon",
+    "species": "Elephant",
+    "age": 10,
+    "isEndangered": true,
+    "habitat": "Savanna"
+  }
+]
