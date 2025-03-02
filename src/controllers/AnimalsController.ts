@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import AnimalsService from '../services/AnimalService';
 import { Animal } from '../models/animal';
 
-// Remove the new keyword since AnimalsService is an object, not a class
 const animalsService = AnimalsService;
 
 const AnimalsController = {
@@ -87,10 +86,8 @@ const AnimalsController = {
     async deleteAnimal(req: Request, res: Response): Promise<void> {
         const id: number = parseInt(req.params.id);
         try {
-            // Update the result type to match the service return type
             const result: { message: string } = await animalsService.deleteAnimal(id);
 
-            // Add the success property to match the expected return type
             const response = { success: true, ...result };
             res.status(200).json(response);
         } catch (error: any) {

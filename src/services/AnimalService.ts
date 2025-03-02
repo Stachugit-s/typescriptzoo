@@ -2,12 +2,19 @@ import fsPromises from 'fs/promises';
 import path from 'path';
 import { Animal } from '../models/animal';
 
-const filePath = path.resolve("data", "zoo.json");
+const projectRoot = process.cwd();
+const filePath = path.join(projectRoot, 'src', 'data', 'zoo.json');
 
 const AnimalsService = {
     async getAnimals(): Promise<Animal[]> {
-        const data = await fsPromises.readFile(filePath, "utf-8");
-        return JSON.parse(data) as Animal[];
+        try {
+            const data = await fsPromises.readFile(filePath, "utf-8");
+            return JSON.parse(data) as Animal[];
+        } catch (error) {
+            console.error(`Error reading zoo.json: ${error instanceof Error ? error.message : String(error)}`);
+            console.error(`File path used: ${filePath}`);
+            throw error;
+        }
     },
 
     async getAnimalById(id: number): Promise<Animal | undefined> {
@@ -35,8 +42,14 @@ const AnimalsService = {
         const id = animals.length ? animals[animals.length - 1].id + 1 : 1;
         const animal: Animal = { id, ...newAnimal };
         animals.push(animal);
-        await fsPromises.writeFile(filePath, JSON.stringify(animals, null, 2), "utf-8");
-        return animal;
+
+        try {
+            await fsPromises.writeFile(filePath, JSON.stringify(animals, null, 2), "utf-8");
+            return animal;
+        } catch (error) {
+            console.error(`Error writing to zoo.json: ${error instanceof Error ? error.message : String(error)}`);
+            throw error;
+        }
     },
 
     async updateAnimal(id: number, updates: Partial<Animal>): Promise<Animal> {
@@ -47,8 +60,14 @@ const AnimalsService = {
         }
         const updatedAnimal: Animal = { ...animals[index], ...updates };
         animals[index] = updatedAnimal;
-        await fsPromises.writeFile(filePath, JSON.stringify(animals, null, 2), "utf-8");
-        return updatedAnimal;
+
+        try {
+            await fsPromises.writeFile(filePath, JSON.stringify(animals, null, 2), "utf-8");
+            return updatedAnimal;
+        } catch (error) {
+            console.error(`Error writing to zoo.json: ${error instanceof Error ? error.message : String(error)}`);
+            throw error;
+        }
     },
 
     async deleteAnimal(id: number): Promise<{ message: string }> {
@@ -58,8 +77,14 @@ const AnimalsService = {
             throw new Error(`Animal with id ${id} not found.`);
         }
         animals.splice(index, 1);
-        await fsPromises.writeFile(filePath, JSON.stringify(animals, null, 2), "utf-8");
-        return { message: `Animal with id ${id} deleted.` };
+
+        try {
+            await fsPromises.writeFile(filePath, JSON.stringify(animals, null, 2), "utf-8");
+            return { message: `Animal with id ${id} deleted.` };
+        } catch (error) {
+            console.error(`Error writing to zoo.json: ${error instanceof Error ? error.message : String(error)}`);
+            throw error;
+        }
     }
 };
 

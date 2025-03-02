@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from "express";
-import animalsRouter from "./routes/users.routes";
+import animalsRouter from "./routes/animalRoutes";
 
 const app: Application = express();
 
