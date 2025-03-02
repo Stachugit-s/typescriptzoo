@@ -1,15 +1,8 @@
 import fsPromises from 'fs/promises';
 import path from 'path';
+import { Animal } from '../models/animal';
 
 const filePath = path.resolve("data", "zoo.json");
-
-interface Animal {
-    id: number;
-    species: string;
-    isEndangered: boolean;
-    habitat: string;
-    [key: string]: any;
-}
 
 const AnimalsService = {
     async getAnimals(): Promise<Animal[]> {
@@ -40,7 +33,7 @@ const AnimalsService = {
     async addAnimal(newAnimal: Omit<Animal, 'id'>): Promise<Animal> {
         const animals = await this.getAnimals();
         const id = animals.length ? animals[animals.length - 1].id + 1 : 1;
-        const animal = { id, ...newAnimal };
+        const animal: Animal = { id, ...newAnimal };
         animals.push(animal);
         await fsPromises.writeFile(filePath, JSON.stringify(animals, null, 2), "utf-8");
         return animal;
@@ -52,7 +45,7 @@ const AnimalsService = {
         if (index === -1) {
             throw new Error(`Animal with id ${id} not found.`);
         }
-        const updatedAnimal = { ...animals[index], ...updates };
+        const updatedAnimal: Animal = { ...animals[index], ...updates };
         animals[index] = updatedAnimal;
         await fsPromises.writeFile(filePath, JSON.stringify(animals, null, 2), "utf-8");
         return updatedAnimal;

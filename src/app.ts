@@ -1,23 +1,14 @@
-import express, { Request, Response } from 'express';
-import { AnimalsController } from './controllers/AnimalsController';
+import express, { Application, Request, Response } from "express";
+import animalsRouter from "./routes/users.routes";
 
-const app = express();
-const port = process.env.PORT || 3000;
+const app: Application = express();
 
 app.use(express.json());
+app.use("/api", animalsRouter);
 
-app.get('/', (req: Request, res: Response) => res.send('Zoo Keeper API is running.'));
-
-// Pobieranie
-app.get('/animals', (req: Request, res: Response) => AnimalsController.getAllAnimals(req, res));
-app.get('/animals/:id', (req: Request, res: Response) => AnimalsController.getAnimalById(req, res));
-app.get('/animals/endangered', (req: Request, res: Response) => AnimalsController.getEndangeredAnimals(req, res));
-app.get('/animals/habitat/:habitat', (req: Request, res: Response) => AnimalsController.getAnimalsByHabitat(req, res));
-app.get('/animals/species', (req: Request, res: Response) => AnimalsController.getAnimalsBySpecies(req, res));
-
-// Dodawanie
-app.post('/animals', (req: Request, res: Response) => AnimalsController.addAnimal(req, res));
-app.put('/animals/:id', (req: Request, res: Response) => AnimalsController.updateAnimal(req, res));
-app.delete('/animals/:id', (req: Request, res: Response) => AnimalsController.deleteAnimal(req, res));
+app.get("/", (req: Request, res: Response) => {
+    res.status(200).send("Witaj w ZooKeeper API! <br> " +
+        "<a href='/api/animals'>Wszystkie zwierzęta</a>");
+});
 
 export default app;

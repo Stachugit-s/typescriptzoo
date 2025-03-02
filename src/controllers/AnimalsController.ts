@@ -1,96 +1,106 @@
 import { Request, Response } from 'express';
 import AnimalsService from '../services/AnimalService';
+import { Animal } from '../models/animal';
+
+// Remove the new keyword since AnimalsService is an object, not a class
+const animalsService = AnimalsService;
 
 const AnimalsController = {
-    async getAllAnimals(req: Request, res: Response) {
+    async getAllAnimals(req: Request, res: Response): Promise<void> {
         try {
-            const animals = await AnimalsService.getAnimals();
+            const animals: Animal[] = await animalsService.getAnimals();
             res.status(200).json(animals);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to retrieve animals.' });
+            res.status(500).json({ error: "Failed to retrieve animals." });
         }
     },
 
-    async getAnimalById(req: Request, res: Response) {
-        const id = parseInt(req.params.id);
+    async getAnimalById(req: Request, res: Response): Promise<void> {
+        const id: number = parseInt(req.params.id);
         try {
-            const animal = await AnimalsService.getAnimalById(id);
+            // Change Animal | null to Animal | undefined to match service return type
+            const animal: Animal | undefined = await animalsService.getAnimalById(id);
             if (!animal) {
-                return res.status(404).json({ error: `Animal with id ${id} not found.` });
+                res.status(404).json({ error: `Animal with id ${id} not found.` });
+                return;
             }
             res.status(200).json(animal);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to retrieve animal.' });
+            res.status(500).json({ error: "Failed to retrieve animal." });
         }
     },
 
-    async getEndangeredAnimals(req: Request, res: Response) {
+    async getEndangeredAnimals(req: Request, res: Response): Promise<void> {
         try {
-            const animals = await AnimalsService.getEndangeredAnimals();
+            const animals: Animal[] = await animalsService.getEndangeredAnimals();
             res.status(200).json(animals);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to retrieve endangered animals.' });
+            res.status(500).json({ error: "Failed to retrieve endangered animals." });
         }
     },
 
-    async getAnimalsByHabitat(req: Request, res: Response) {
-        const habitat = req.params.habitat;
+    async getAnimalsByHabitat(req: Request, res: Response): Promise<void> {
+        const habitat: string = req.params.habitat;
         try {
-            const animals = await AnimalsService.getAnimalsByHabitat(habitat);
+            const animals: Animal[] = await animalsService.getAnimalsByHabitat(habitat);
             res.status(200).json(animals);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to retrieve animals by habitat.' });
+            res.status(500).json({ error: "Failed to retrieve animals by habitat." });
         }
     },
 
-    async getAnimalsBySpecies(req: Request, res: Response) {
-        const species = req.query.species as string;
+    async getAnimalsBySpecies(req: Request, res: Response): Promise<void> {
+        const species: string = req.query.species as string;
         try {
-            const animals = await AnimalsService.getAnimalsBySpecies(species);
+            const animals: Animal[] = await animalsService.getAnimalsBySpecies(species);
             res.status(200).json(animals);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to retrieve animals by species.' });
+            res.status(500).json({ error: "Failed to retrieve animals by species." });
         }
     },
 
-    async addAnimal(req: Request, res: Response) {
-        const newAnimal = req.body;
+    async addAnimal(req: Request, res: Response): Promise<void> {
+        const newAnimal: Omit<Animal, 'id'> = req.body;
         try {
-            const animal = await AnimalsService.addAnimal(newAnimal);
+            const animal: Animal = await animalsService.addAnimal(newAnimal);
             res.status(201).json(animal);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to add animal.' });
+            res.status(500).json({ error: "Failed to add animal." });
         }
     },
 
-    async updateAnimal(req: Request, res: Response) {
-        const id = parseInt(req.params.id);
-        const updates = req.body;
+    async updateAnimal(req: Request, res: Response): Promise<void> {
+        const id: number = parseInt(req.params.id);
+        const updates: Partial<Animal> = req.body;
         try {
-            const updatedAnimal = await AnimalsService.updateAnimal(id, updates);
+            const updatedAnimal: Animal = await animalsService.updateAnimal(id, updates);
             res.status(200).json(updatedAnimal);
-        } catch (error) {
-            if (error instanceof Error && error.message.includes('not found')) {
+        } catch (error: any) {
+            if (error.message && error.message.includes('not found')) {
                 res.status(404).json({ error: error.message });
             } else {
-                res.status(500).json({ error: 'Failed to update animal.' });
+                res.status(500).json({ error: "Failed to update animal." });
             }
         }
     },
 
-    async deleteAnimal(req: Request, res: Response) {
-        const id = parseInt(req.params.id);
+    async deleteAnimal(req: Request, res: Response): Promise<void> {
+        const id: number = parseInt(req.params.id);
         try {
-            const result = await AnimalsService.deleteAnimal(id);
-            res.status(200).json(result);
-        } catch (error) {
-            if (error instanceof Error && error.message.includes('not found')) {
+            // Update the result type to match the service return type
+            const result: { message: string } = await animalsService.deleteAnimal(id);
+
+            // Add the success property to match the expected return type
+            const response = { success: true, ...result };
+            res.status(200).json(response);
+        } catch (error: any) {
+            if (error.message && error.message.includes('not found')) {
                 res.status(404).json({ error: error.message });
             } else {
-                res.status(500).json({ error: 'Failed to delete animal.' });
+                res.status(500).json({ error: "Failed to delete animal." });
             }
         }
     }
 };
 
-export { AnimalsController };
+export default AnimalsController;
